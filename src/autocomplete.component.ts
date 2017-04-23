@@ -173,6 +173,8 @@ export class AutoCompleteComponent {
    */
   public clearValue() {
     this.keyword = null;
+    this.hideItemList();
+    this.ionClear(null);
     return;
   }
 }
