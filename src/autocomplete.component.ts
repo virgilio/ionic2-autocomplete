@@ -18,6 +18,9 @@ const defaultOpts = {
 @Component({
   template: `
       <ion-searchbar (ionInput)="getItems($event)"
+                     (ionBlur)="ionBlur($event)"
+                     (ionFocus)="ionFocus($event)"
+                     (ionClear)="ionClear($event)"
                      [(ngModel)]="keyword"
                      [cancelButtonText]="options.cancelButtonText == null ? defaultOpts.cancelButtonText : options.cancelButtonText"
                      [showCancelButton]="options.showCancelButton == null ? defaultOpts.showCancelButton : options.showCancelButton"
@@ -45,12 +48,15 @@ const defaultOpts = {
 })
 export class AutoCompleteComponent {
 
-  @Input() public dataProvider:   any;
-  @Input() public itemComponent:  any;
-  @Input() public options:        any;
-  @Input() public keyword:      string;
-  @Output() public itemSelected:  EventEmitter<any>;
-  @Output() public ionAutoInput:  EventEmitter<string>;
+  @Input() public dataProvider: any;
+  @Input() public itemComponent: any;
+  @Input() public options: any;
+  @Input() public keyword: string;
+  @Output() public itemSelected: EventEmitter<any>;
+  @Output() public ionAutoInput: EventEmitter<string>;
+  @Output() public ionAutoBlur: EventEmitter<any>;
+  @Output() public ionAutoFocus: EventEmitter<any>;
+  @Output() public ionAutoClear: EventEmitter<any>;
 
   private suggestions:  string[];
   private showList:     boolean;
@@ -65,6 +71,11 @@ export class AutoCompleteComponent {
     this.showList = false;
     this.itemSelected = new EventEmitter<any>();
     this.ionAutoInput = new EventEmitter<string>();
+    this.ionAutoBlur = new EventEmitter<any>();
+    this.ionAutoFocus = new EventEmitter<any>();
+    this.ionAutoClear = new EventEmitter<any>();
+
+
     this.options = {};
 
     // set default options
@@ -100,6 +111,27 @@ export class AutoCompleteComponent {
 
     // emit event
     this.ionAutoInput.emit(this.keyword);
+  }
+
+  /**
+   * emit blur event
+   */
+  private ionBlur($event: any) {
+    this.ionAutoBlur.emit($event);
+  }
+
+  /**
+   * emit focus event
+   */
+  private ionFocus($event: any) {
+    this.ionAutoFocus.emit($event);
+  }
+
+  /**
+   * emit clear event
+   */
+  private ionClear($event: any) {
+    this.ionAutoClear.emit($event);
   }
 
   /**
